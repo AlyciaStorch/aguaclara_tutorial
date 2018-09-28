@@ -31,37 +31,54 @@ These questions are meant to test what you've learned from the Python Basics tut
 
 1. Write a conditional statement with 3 conditions: when x is 10, when x is 1, and when x is anything other than 1 or 10. For each condition, have your code print what the value is or isn't.
 
-<!--- Fill you answer here. --->
+```python
+if x == 10:
+  print('x is 10')
+elif x == 1:
+  print('x is 1')
+else:
+  print('x is neither 10 nor 1')
+  ```
 
 
 
 
 2. Write a `for` loop that takes a variable with an initial value of 0, and adds the current index to the previous value of that variable (i.e. you variable should grow in size every iteration). Perform the iteration 20 times, and have the final value be printed at the end.
 
-<!--- Fill you answer here. --->
+```python
+x=0
+for x in range(20):
+  x = x + 1
 
-
-
-
-
+print(x)
+```
 
 
 
 
 3. Using the NumPy package and `unit_registry`, calculate the value of sin(4) meters, and use the sigfig function from the unit unit_registry module in aide_design to get your answer to 2 sig-figs. *(Hint: You will need to import these packages. Remember how to do that?)*
 
-<!--- Fill you answer here. --->
-
-
+```python
+from aide_design.play import*
+x= ut.sig(np.sin(4),2)
+print(x)
+```
 
 4. Create a `list` of length 5, and verify the length of your list. Once you've done that, turn your `list` into an `array` and apply units of meters to it. After that, create a 5x5 `array`, extract the middle row and middle column. Verify the size of your 2D `array` and apply units of liters to it.
 
-<!--- Fill you answer here. --->
-
-
-
-
-
+```python
+from aide_design.play import*
+myList = [1, 2, 3, 4, 5]
+x = len(myList)
+print(x)
+myArray = np.array(myList) * u.m
+my2DArray = np.array([myList, [2, 4, 6, 8, 10], [3, 6, 9, 12, 15], [4, 8, 12, 16, 20], [5, 10, 15, 20, 25]])
+print(my2DArray)
+MidRow = my2DArray[2,:]
+MidCol = my2DArray[:,2]
+print(np.size(my2DArray))
+my2DArrayUnits = my2DArray * u.L
+```
 
 
 
@@ -79,13 +96,28 @@ from scipy.constants import Boltzmann as kB_sc # I've imported the unitless valu
 
 kB = kB_sc * u.joule / u.kelvin # I've given kB units for you in J/K; you can use the kB variable to give you Boltzmann's constant with units
 
-# Write your code here
-
+def EinsteinStokes(T,r,v):
+  """This function takes Temperature,  particle radius, and viscosity of water to calculate the diffusion coefficient D"""
+  T= T * u.kelvin
+  r= r * u.m
+  v= v * (u.m * u.m)/u.s
+  D = (kB * T /(6 * u.pi * v * r)).to_base_units()
+  return D
 ```
 
 6. You have a pipe with a radius of 0.2 m with water flowing in it at 2 m<sup>3</sup>/s. You want to see how the Reynolds Number changes as viscosity changes due to a change in temperature from 0 to 200<sup>o</sup>C. Create a plot of Reynolds Number against Temperature in Kelvin to show a relationship. Make sure your plot has a title, labeled axes, and axes grid. You can use functions from `physchem` like `pc.re_pipe` and `pc.viscosity_kinematic`. *(Hint: Make an array of temperatures to input into the `pc.viscosity_kinematic` function)*. Make sure to save you plot to your images folder in your personal repository, and display it below using `plt.show()` and a relative file path to the image.
 
-<!--- Fill you answer here. --->
+```python
+from aide_design.play import*
+T= u.Quantity(np.arange(201), u.degC)
+plt.plot(T, pc.re_pipe(2 * u.m *u.m * u.m / u.s, .4 * u.m , pc.viscosity_kinematic(T)))
+plt.xlabel('Temperature')
+plt.ylabel('Reynolds Number')
+plt.title('Reynolds Number vs Temp')
+plt.savefig('./Images/Reynolds_Plot.png')
+plt.show()
+
+```
 
 
 # GitHub Basics
